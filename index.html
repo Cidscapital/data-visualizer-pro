@@ -1,442 +1,303 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
-<head>
-    <meta charset="UTF-8">
-    <title>CSV File Upload and Plotting</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
 
-    <style>
-        *,
-        html {
-            box-sizing: border-box;
-        }
-    
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            font-size: 100%;
-            background: #f5f7fb;
-            color: #2e3438;
-        }
-    
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            margin: 0 0 24px 0;
-        }
-    
-        p {
-            margin: 0 0 24px 0;
-        }
-    
-        a,
-        a:hover,
-        a:active,
-        a:visited {
-            color: #5978f3;
-            text-decoration: underline;
-        }
-    
-        .btn {
-            display: inline-block;
-            background-color: #5978f3;
-            color: white;
-            padding: 12px 24px;
-            font: inherit;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            margin-left: 5px;
-            margin-right: 5px;
-            margin-bottom: 40px;
-        }
-    
-        .btn:hover,
-        .btn:active,
-        .btn:focus {
-            background-color: #4264e8;
-        }
-    
-        .container {
-            display: flex;
-            justify-items: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-    
-        .box {
-            box-shadow: 0 15px 35px 0 rgba(111, 111, 111, 0.12);
-            background: white;
-            display: flex;
-            flex-wrap: wrap;
-            max-width: 1000px;
-            margin: auto auto;
-            border-radius: 12px;
-            min-height: 34rem;
-            padding: 34px;
-        }
-    
-        .box-column {
-            flex: 1 1 50%;
-            padding: 10px;
-            min-width: 300px;
-            min-height: 300px;
-        }
-    
-        .centered {
-            text-align: center;
-        }
-    
-        .contact-info {
-            text-align: center;
-            width: 100%;
-            margin-top: 24px;
-        }
-    
-        .dropzone {
-            transform: translateZ(0);
-            border: 2px dashed #cccccc;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-        }
-    
-    
-        .grid-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        grid-gap: 10px;
-        margin-top: 20px;
-        min-height: 100%;
-        min-width: 100%;
-        }
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
 
-        .grid-item {
-        border: 1px solid #ccc;
-        padding: 10px;
-        }
-        
-        .key-list {
-            grid-column: 1 / 2;
-            grid-row: 1 / 13;
-            overflow: auto;
-        }
-    
-        .no-select {
-            -webkit-touch-callout: none;
-            /* iOS Safari */
-            -webkit-user-select: none;
-            /* Safari */
-            -khtml-user-select: none;
-            /* Konqueror HTML */
-            -moz-user-select: none;
-            /* Old versions of Firefox */
-            -ms-user-select: none;
-            /* Internet Explorer/Edge */
-            user-select: none;
-            /* Non-prefixed version, currently
-                                     supported by Chrome, Opera and Firefox */
-        }
-    
-        .drop-region {
-            border-radius: 0.5rem;
-            background-color: #3f97d6;
-            border: 2px dashed #000;
-            margin: 4px;
-            opacity: 0;
-        }
-    
-        .drop-region.active {
-            opacity: 0.4;
-            z-index: 1;
-        }
-    
-        .drop-region.over {
-            opacity: 1.0;
-            border: 2px solid #000;
-        }
-    
-        /*  REMOVE ME */
-    
-        .drop-region.color {
-            background-color: #3ed4c8;
-            grid-column: 12 / 13;
-            grid-row: 1 / 12;
-        }
-    
-        .drop-region.xaxis {
-            grid-column: 3 / 13;
-            grid-row: 12 / 13;
-        }
-    
-        .drop-region.yaxis {
-            grid-column: 2 / 3;
-            grid-row: 1 / 12;
-        }
-    
-        .key {
-            -webkit-transform: translate3d(0, 0, 0);
-            opacity: 0.999;
-            /* For removing white background when dragging a key */
-            border-radius: 25px;
-            background-color: #3f97d6;
-            padding: 5px;
-            margin: 5px auto;
-            width: 80%;
-            text-align: center;
-            cursor: move;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            font-size: 1rem;
-        }
-    
-        .categorical {
-            background-color: #3ed4c8;
-        }
-    
-        .invisible {
-            border: 2px dashed #000;
-            height: 20%;
-        }
-    
-        /* .grid-item {
-            background-color: #fff;
-            border-radius: 0.5rem;
-        } */
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
-        /* .grid-container {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 1fr);
-        gap: 10px;
-        padding: 10px;
-        }
-        .grid-item {
-        background-color: #fff;
-        padding: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        } */
-        
-        /* Spinner */
+    <!-- Option 1: Include in HTML -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     
-        .spinner-style {
-            /* //  display: inline-block; */
-            /* position: relative; */
-            width: 80px;
-            height: 80px;
-            display: inline-block;
-            -webkit-animation: rotation .8s linear infinite;
-            -moz-animation: rotation .8s linear infinite;
-            -o-animation: rotation .8s linear infinite;
-            animation: rotation 0.8s linear infinite;
-            border-left: 5px solid white;
-            border-right: 5px solid white;
-            border-bottom: 5px solid white;
-            border-top: 5px solid rgb(120, 120, 120);
-            border-radius: 100%;
-        }
-    
-        @-webkit-keyframes rotation {
-            from {
-                -webkit-transform: rotate(0deg);
-            }
-    
-            to {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-    
-        @-moz-keyframes rotation {
-            from {
-                -moz-transform: rotate(0deg);
-            }
-    
-            to {
-                -moz-transform: rotate(360deg);
-            }
-        }
-    
-        @-o-keyframes rotation {
-            from {
-                -o-transform: rotate(0deg);
-            }
-    
-            to {
-                -o-transform: rotate(360deg);
-            }
-        }
-    
-        @keyframes rotation {
-            from {
-                transform: rotate(0deg);
-            }
-    
-            to {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-</head>
+    <!-- Style -->
+    <link rel="stylesheet" href="css/style.css">
 
-<body>
-    <!-- <h1>CSV File Upload and Plotting</h1>
-    <p>Select a CSV file to plot:</p>
-    <input type="file" id="csv-file" accept=".csv">
-    <div id="plots"></div> -->
+    <title>Data Visualization</title>
+  </head>
+  <body>
 
-    <div class="container" id="splash-ui">
-        <div class="box">
-            <div class="box-column">
-                <h1 class="heading centered">What is CSV Plot?</h1>
-                <ul>
-                    <li>Online CSV plotting tool</li>
-                    <li>Interactive interface</li>
-                    <li>CSV formats supported</li>
-                    <li>Private, your data never leaves your device</li>
+
+    <div class="site-mobile-menu site-navbar-target">
+        <div class="site-mobile-menu-header">
+          <div class="site-mobile-menu-close mt-3">
+            <span class="icon-close2 js-menu-toggle"></span>
+          </div>
+        </div>
+        <div class="site-mobile-menu-body"></div>
+      </div>
+
+
+      <!-- <div class="top-bar">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <a class=""><span class="mr-2  icon-envelope-open-o"></span> <span class="d-none d-md-inline-block">SAME DAY DELIVERY - On orders before 2 PM</span></a>
+              <span class="mx-md-2 d-inline-block"></span>
+
+              <div class="float-right">
+
+                <a href="#" class=""><span class="d-none d-md-inline-block">Client Login</span></a>
+                <span class="mx-md-2 d-inline-block"></span>
+                <a href="#" class=""><span class="d-none d-md-inline-block">Vendor Login</span></a>
+                <span class="mx-md-2 d-inline-block"></span>
+                <a href="#" class=""><span class="d-none d-md-inline-block">Admin Login</span></a>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div> -->
+
+      <header class="site-navbar js-sticky-header site-navbar-target" role="banner">
+
+        <div class="container">
+          <div class="row align-items-center position-relative">
+
+
+            <div class="site-logo">
+              <a href="index.html" class="text-black"><span style="color: #132e57;">Data Visualization</span></a>
+            </div>
+
+            <div class="col-12">
+              <nav class="site-navigation text-right ml-auto " role="navigation">
+            
+                <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
+                  <li><a href="index.html" class="nav-link">Home</a></li>
+                  <li><a href="plot.html" class="nav-link">Plot</a></li>
+                  <li><a href="about.html" class="nav-link">About Us</a></li>
                 </ul>
-                </div>
-                <div class="box-column dropzone" id="file-load">
-                    <div id="file-ui"> 
-                        <h1 class="heading">Load a CSV file</h1>
-                        <br>
-                        <input type="file" class="btn" id="csv-file" accept=".csv">
-                    </div>
-                </div>
-                <div class="contact-info">Contact: <a href="mailto:jesse.jason2002@gmail.com">jesse.jason2002@gmail.com</a></div>
-                </div>
-                </div>
-                <div id="plot-container" style="display: none;" class="grid-container">
-                    <div id="scatter-plot" class="grid-item"></div>
-                    <div id="line-plot" class="grid-item"></div>
-                    <div id="bar-plot" class="grid-item"></div>
-                    <div id="histogram" class="grid-item"></div>
-                </div>
+              </nav>
+            
+            </div>
 
-    <script>
-        // Event listener for file input
-        document.getElementById('csv-file').addEventListener('change', handleFileSelect, false);
+            <div class="toggle-button d-inline-block d-lg-none"><a href="#" class="site-menu-toggle py-5 js-menu-toggle text-black"><span style="color: #132e57;" class="icon-menu h3"></span></a></div>
 
-        // Function to handle file selection
-        function handleFileSelect(evt)
-        {
-            var file = evt.target.files[0];
+          </div>
+        </div>
 
-            if (file)
-            {
-                var reader = new FileReader();
+      </header>
 
-                reader.onload = function (e)
-                {
-                    var contents = e.target.result;
-                    var data = parseCsv(contents);
+    <header>
+  
+    
+      <!-- Navbar -->
+      <!-- <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
+            aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarExample01">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item active">
+                <a class="nav-link" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Pricing</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav> -->
+      <!-- Navbar -->
+    
+      <!-- Background image -->
+      <div id="intro-example" class="p-5 text-center bg-image"
+        style="background-image: url('https://mdbcdn.b-cdn.net/img/new/slides/041.webp');">
+        <div class="mask" style="background-color: rgba(0, 0, 0, 0.7);">
+          <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="text-white">
+              <h1 class="mb-3">Data Visualization</h1>
+              <h5 class="mb-4">
+                Create beautiful and interactive plots from your data
+              </h5>
+              <a class="btn btn-outline-light btn-lg m-2" href="https://www.youtube.com/watch?v=c9B4TPnak1A" role="button"
+                rel="nofollow" target="_blank"><span></span><i class="bi bi-bar-chart-line"></i></span> Start Plotting</a>
+              <a class="btn btn-outline-light btn-lg m-2" href="https://mdbootstrap.com/docs/standard/" target="_blank"
+                role="button"><span><i class="bi bi-github"></i></span> Download Source Code</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Background image -->
+    </header>
 
-                    plotData(data);
-                };
+    </div>
+    <br><br>
+    <div class="site-section" id="services-section" style="color: #132e57;">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-12 text-center">
+            <h2 class="font-weight-bolder section-title mb-3">Features</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="service text-center">
+              <h3 class="font-italic mb-3">Supports CSV Format</h3>
+              <p>This means that the website is designed to accept CSV files as input, making it easy to import data into the website.
+              Users can upload CSV files directly from their devices, and the website will process the data to generate
+              visualizations.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="service text-center">
+              <h3 class="font-italic mb-3">Private</h3>
+              <p>The website processes data on the frontend using JavaScript, which means that data uploaded to the site never leaves the
+              user's device. This makes the site more secure and ensures that the user's data is kept private.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="service text-center">
+              <h3 class="font-italic mb-3">Clean, Simple Interface</h3>
+              <p>The website has a clean and simple interface, which makes it easy for users to navigate and use. The interface is
+              designed to be intuitive and user-friendly, with clear instructions and visual aids to help users understand how to use
+              the site.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<br><br><br>
+    <!-- Footer -->
+    <footer class="page-footer font-small indigo" style="background: #f8f9fa;">
+    
+      <!-- Footer Links -->
+      <div class="container text-center text-md-left">
+    
+        <!-- Grid row -->
+        <div class="row">
+          
+            <!-- Grid column -->
+            <div class="col-md-3 mx-auto">
+          <br>
+              <!-- Content -->
+              <h5 class="text-uppercase font-weight-bold" style="color: #132e57;">FAST. RELIABLE</h5>
+              <p>Data Visualization is a free online tool that allows you to easily visualize your CSV data. You can
+              upload your data and generate interactive plots in just a few clicks. </p>
+          
+            </div>
+            
+        
+          
+          
+          <!-- Grid column -->
+    
+          <hr class="clearfix w-100 d-md-none">
+    
+          <!-- Grid column -->
+          <div class="col-md-3 mx-auto">
+    
+            <!-- Links -->
+            <h5 class="font-weight-bold text-uppercase mt-3 mb-4" style="color: #132e57;">Our Store</h5>
+    
+            <ul class="list-unstyled">
+              <li>
+                <a href="about.html">About</a> <br>
+              </li><br>
+              <li>
+                <a href="plot.html">Plot</a>
+              </li>
+              <!--
+              <li>
+                <a href="#!">Link 3</a>
+              </li>
+              <li>
+                <a href="#!">Link 4</a>
+              </li> -->
+            </ul>
+    
+          </div>
+          <!-- Grid column -->
+    
+          <hr class="clearfix w-100 d-md-none">
+    
+          <!-- Grid column -->
+          <div class="col-md-3 mx-auto">
+    
+            <!-- Links -->
+            <h5 class="font-weight-bold text-uppercase mt-3 mb-4" style="color: #132e57;">Contact</h5>
+    
+            <ul class="list-unstyled">
+              
+              <li>
+                <address><br>
+                  1234, Main Street, <br>
+                  Nairobi, Kenya
+                </address>
+              </li>
+              <li>
+                <p>Handcafted by <span><a href="mailto:cidscapital@gmail.com">Jesse Jason</a></span></p>
+              </li>
+              <li>
+                <a href="tel:+254702593387">+254 702 593 387</a>
+            </ul>
+    
+          </div>
+          <!-- Grid column -->
+    
+          <hr class="clearfix w-100 d-md-none">
+    
+          <!-- Grid column -->
+          <!-- <div class="col-md-3 mx-auto">
+    
+             Links
+            <h5 class="font-weight-bold text-uppercase mt-3 mb-4">Links</h5>
+    
+            <ul class="list-unstyled">
+              <li>
+                <a href="#!">Link 1</a>
+              </li>
+              <li>
+                <a href="#!">Link 2</a>
+              </li>
+              <li>
+                <a href="#!">Link 3</a>
+              </li>
+              <li>
+                <a href="#!">Link 4</a>
+              </li>
+            </ul>
+    
+          </div> -->
+          <!-- Grid column -->
+    
+        </div>
+        <!-- Grid row -->
+    
+      </div>
+      <!-- Footer Links -->
+    
+      <!-- Copyright -->
+      <div class="footer-copyright text-center py-3">© 2023 Copyright:
+        <a href="mailto:cidscapital@gmail.com">Jesse Jason</a>
+      </div>
+      <!-- Copyright -->
+    
+    </footer>
+    <!-- Footer -->
 
-                reader.readAsText(file);
-            }
-        }
 
-        // Function to parse CSV data
-        function parseCsv(csvData)
-        {
-            var rows = csvData.split('\n');
-            var data = [];
-
-            for (var i = 0; i < rows.length; i++)
-            {
-                var row = rows[i].split(',');
-                data.push(row);
-            }
-
-            return data;
-        }
-
-        // Function to plot data
-        function plotData(data)
-        {
-            const plotContainer = document.getElementById('plot-container');
-            plotContainer.style.display = 'grid';
-            var columns = data[0];
-            var xValues = data.map(row => parseFloat(row[0]));
-            var yValues = data.map(row => parseFloat(row[1]));
-
-            // Scatter plot
-            var scatterData = [{
-                x: xValues,
-                y: yValues,
-                mode: 'markers',
-                type: 'scatter'
-            }];
-
-            var scatterLayout = {
-                title: 'Scatter Plot',
-                xaxis: { title: columns[0] },
-                yaxis: { title: columns[1] }
-            };
-
-            Plotly.newPlot('scatter-plot', scatterData, scatterLayout);
-
-            // Line plot
-            var lineData = [{
-                x: xValues,
-                y: yValues,
-                mode: 'lines',
-                type: 'scatter'
-            }];
-
-            var lineLayout = {
-                title: 'Line Plot',
-                xaxis: { title: columns[0] },
-                yaxis: { title: columns[1] }
-            };
-
-            Plotly.newPlot('line-plot', lineData, lineLayout);
-
-            // Bar plot
-            var barData = [{
-                x: xValues,
-                y: yValues,
-                type: 'bar'
-            }];
-
-            var barLayout = {
-                title: 'Bar Plot',
-                xaxis: { title: columns[0] },
-                yaxis: { title: columns[1] }
-            };
-
-            Plotly.newPlot('bar-plot', barData, barLayout);
-
-            // Histogram
-            var histogramData = [{
-                x: xValues,
-                type: 'histogram'
-            }];
-
-            var histogramLayout = {
-                title: 'Histogram',
-                xaxis: { title:
-                columns[0]
-                },
-                yaxis: { title: 'Frequency' }
-            };
-             Plotly.newPlot('histogram', histogramData, histogramLayout);
-        }
-
-    </script>
-</body>
-
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>
