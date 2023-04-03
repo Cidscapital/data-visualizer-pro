@@ -6,6 +6,9 @@
 
 Data Visualizer Pro is a web application that allows users to upload CSV files and visualize their data using interactive scatter and line plots. This project was created as part of the curriculum for the Udacity Front End Web Developer Nanodegree program.
 
+## Deployed site URL
+
+![Data Visualizer Pro](https://cidscapital.github.io/data-visualizer-pro/index.html)
 
 ## Team Members, Roles, and Timeline
 
