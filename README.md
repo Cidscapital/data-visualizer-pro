@@ -1,5 +1,6 @@
 # Data Visualizer Pro
-[Home Page](!https://drive.google.com/file/d/12PKSIjk3idPEbtZVhyxFtWorLu7k7Zeq/view?usp=sharing)
+![Home Page](https://user-images.githubusercontent.com/72131219/229438398-40d6cfd7-a0a2-4e64-8a27-bcbb95ad2ebb.png)
+
 
 ## Introduction
 
