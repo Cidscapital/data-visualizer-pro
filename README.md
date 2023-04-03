@@ -8,7 +8,7 @@ Data Visualizer Pro is a web application that allows users to upload CSV files a
 
 ## Deployed site URL
 
-![Data Visualizer Pro](https://cidscapital.github.io/data-visualizer-pro/index.html)
+[Data Visualizer Pro](https://cidscapital.github.io/data-visualizer-pro/index.html)
 
 ## Team Members, Roles, and Timeline
 
